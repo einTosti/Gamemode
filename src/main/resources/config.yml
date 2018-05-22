@@ -1,0 +1,9 @@
+# #############################
+# Gamemode v2.0 | by einTosti #
+# #############################
+# ------------------
+# enableGui: Enables/Disables the *gamemode-changer GUI* [/gm]
+# versionChecker: Enables/Disable notification if there is a new version available
+# ------------------
+enableGui: true
+versionChecker: true

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Gamemode:jar">
+    <output-path>$USER_HOME$/Desktop/testServer/plugins</output-path>
+    <root id="archive" name="Gamemode.jar">
+      <element id="module-output" name="Gamemode" />
+    </root>
+  </artifact>
+</component>
