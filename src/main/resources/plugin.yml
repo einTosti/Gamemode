@@ -1,5 +1,5 @@
 name: Gamemode
-version: 2.0
+version: 2.0.1
 main: de.eintosti.gamemode.Gamemode
 author: einTosti
 website: www.twitter.com/einTosti
@@ -8,7 +8,7 @@ commands:
     gm:
       description: Easily change your Gamemode.
       usage: /<command> <0,1,2,3>
-      alias: [gamemode]
+      aliases: [gamemode]
     gmc:
       description: Changes your Gamemode to creative.
       usage: /<command>

@@ -98,7 +98,7 @@ public class GamemodeCommand implements CommandExecutor {
             Utils.getInstance().showPermErrorMessage(player);
         }
         Gamemode.plugin.reloadConfig();
-        player.sendMessage(Utils.getInstance().getString("gm_configReloaded"));
+        player.sendMessage(Utils.getInstance().getString("gm_configReloaded").replace("%colour%", Utils.getInstance().mColour.toString()));
     }
 
     private boolean openGamemodeGui() {

@@ -10,6 +10,5 @@ public enum Arguments {
     spectator,
     colour,
     info,
-    language,
     reload
 }
