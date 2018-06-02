@@ -18,10 +18,9 @@ import java.net.URL;
  * @author einTosti
  */
 public class PlayerJoin implements Listener {
-    private String mKey = "key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=";
+    private String mKey = "key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=44682";
     private String mPluginVersion;
     private PluginDescriptionFile pdf = Gamemode.plugin.getDescription();
-
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

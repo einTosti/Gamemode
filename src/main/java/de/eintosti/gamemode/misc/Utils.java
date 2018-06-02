@@ -43,6 +43,10 @@ public class Utils {
         }
     }
 
+    public void showPermErrorMessage(Player player) {
+        player.sendMessage(getString("no_permission"));
+    }
+
     /*
      * GUIs
      */
@@ -54,10 +58,6 @@ public class Utils {
         inv.setItem(position, itemStack);
     }
 
-    public void showPermErrorMessage(Player player) {
-        player.sendMessage(getString("no_permission"));
-    }
-
     /*
      * Manage Colour
      */
@@ -66,7 +66,6 @@ public class Utils {
         saveColour();
 
         ColourInventory.getInstance().openInventory(player);
-        Gamemode.plugin.getLogger().info(getString("colour_changed"));
         player.sendMessage(getString("colour_changed").replace("%colour%", mColour + colour));
     }
 
