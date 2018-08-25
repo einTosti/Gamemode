@@ -18,6 +18,7 @@ public class GamemodeSurvival implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+
         if (args.length == 0) {
             GamemodeCommand.getInstance().setPlayerGamemode(player, "gm.survival", GameMode.SURVIVAL, Utils.getInstance().getString("gamemode_survival"));
         } else if (args.length == 1) {

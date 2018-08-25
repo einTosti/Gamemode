@@ -18,6 +18,7 @@ public class GamemodeAdventure implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+
         if (args.length == 0) {
             GamemodeCommand.getInstance().setPlayerGamemode(player, "gm.adventure", GameMode.ADVENTURE, Utils.getInstance().getString("gamemode_adventure"));
         } else if (args.length == 1) {

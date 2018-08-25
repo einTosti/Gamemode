@@ -19,9 +19,7 @@ public class GamemodeCommand implements CommandExecutor {
     private static GamemodeCommand instance;
 
     public static GamemodeCommand getInstance() {
-        if (instance == null) {
-            instance = new GamemodeCommand();
-        }
+        if (instance == null) instance = new GamemodeCommand();
         return instance;
     }
 
@@ -40,14 +38,14 @@ public class GamemodeCommand implements CommandExecutor {
             }
         } else if (args.length == 1 || args.length == 2) {
             if (args.length == 1) {
-                if (args[0].toLowerCase().equals("info")) {
-                    InfoInventory.getInstance().openInventory(player);
-                    return true;
-                }
-
-                if (args[0].toLowerCase().equals("reload") || args[0].toLowerCase().equals("rl")) {
-                    reloadPlugin(player);
-                    return true;
+                switch (args[0].toLowerCase()) {
+                    case "info":
+                        InfoInventory.getInstance().openInventory(player);
+                        break;
+                    case "rl":
+                    case "reload":
+                        reloadPlugin(player);
+                        break;
                 }
             }
 
@@ -96,6 +94,7 @@ public class GamemodeCommand implements CommandExecutor {
     private void reloadPlugin(Player player) {
         if (!player.hasPermission("gm.reload")) {
             Utils.getInstance().showPermErrorMessage(player);
+            return;
         }
         Gamemode.plugin.reloadConfig();
         player.sendMessage(Utils.getInstance().getString("gm_configReloaded").replace("%colour%", Utils.getInstance().mColour.toString()));
@@ -122,6 +121,7 @@ public class GamemodeCommand implements CommandExecutor {
     protected void setPlayerGamemode(Player player, String permission, GameMode gameMode, String gameModeName) {
         if (!player.hasPermission(permission)) {
             Utils.getInstance().showPermErrorMessage(player);
+            return;
         }
         player.setGameMode(gameMode);
         player.sendMessage(Utils.getInstance().getString("gm_changed").replace("%gamemode%", Utils.getInstance().mColour + gameModeName));
@@ -130,6 +130,7 @@ public class GamemodeCommand implements CommandExecutor {
     protected void setTargetGamemode(Player player, String args[], int i, GameMode gameMode, String gameModeName) {
         if (!player.hasPermission("gm.setothers")) {
             Utils.getInstance().showPermErrorMessage(player);
+            return;
         }
 
         Player target = Bukkit.getPlayer(args[i]);

@@ -18,6 +18,7 @@ public class GamemodeSpectator implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+
         if (args.length == 0) {
             GamemodeCommand.getInstance().setPlayerGamemode(player, "gm.spectator", GameMode.SPECTATOR, Utils.getInstance().getString("gamemode_spectator"));
         } else if (args.length == 1) {

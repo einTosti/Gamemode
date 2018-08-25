@@ -18,6 +18,7 @@ public class GamemodeCreative implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+
         if (args.length == 0) {
             GamemodeCommand.getInstance().setPlayerGamemode(player, "gm.creative", GameMode.CREATIVE, Utils.getInstance().getString("gamemode_creative"));
         } else if (args.length == 1) {
