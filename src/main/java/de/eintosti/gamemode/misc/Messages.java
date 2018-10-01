@@ -17,9 +17,7 @@ public class Messages {
     private static Messages instance;
 
     public static synchronized Messages getInstance() {
-        if (instance == null) {
-            instance = new Messages();
-        }
+        if (instance == null) instance = new Messages();
         return instance;
     }
 
@@ -32,7 +30,6 @@ public class Messages {
                 e.printStackTrace();
             }
         }
-
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         StringBuilder sb = new StringBuilder();
@@ -48,21 +45,21 @@ public class Messages {
         addLine(sb, "# ---------");
         addLine(sb, "# MESSAGES");
         addLine(sb, "# ---------");
-        setMessage(sb, config, "prefix", "§7● %colour%GM §8»");
-        setMessage(sb, config, "no_permission", "%prefix% §7You do not have enough §cPermission §7for that!");
+        setMessage(sb, config, "prefix", "&7● %colour%GM &8»");
+        setMessage(sb, config, "no_permission", "%prefix% &7You do not have enough &cPermission &7for that!");
         setMessage(sb, config, "not_a_player", "%prefix% You have to be a player to use this command!");
         addLine(sb, "");
-        setMessage(sb, config, "colour_changed", "%prefix% §7Colour changed to %colour%§7.");
+        setMessage(sb, config, "colour_changed", "%prefix% &7Colour changed to %colour%&7.");
         addLine(sb, "");
-        setMessage(sb, config, "gm_usage", "%prefix% §7Usage§8: §c/gm <0,1,2,3> [Player]");
-        setMessage(sb, config, "gm_changed", "%prefix% §7Your gamemode was set to %gamemode%§7.");
-        setMessage(sb, config, "gm_playerNotFound", "%prefix% §7Error§8: §cPlayer not found!");
-        setMessage(sb, config, "gm_configReloaded", "%prefix% §7The %colour%config §7was %colour%reloaded§7.");
+        setMessage(sb, config, "gm_usage", "%prefix% &7Usage&8: &c/gm <0,1,2,3> [Player]");
+        setMessage(sb, config, "gm_changed", "%prefix% &7Your gamemode was set to %gamemode%&7.");
+        setMessage(sb, config, "gm_playerNotFound", "%prefix% &7Error&8: &cPlayer not found!");
+        setMessage(sb, config, "gm_configReloaded", "%prefix% &7The %colour%config &7was %colour%reloaded&7.");
         addLine(sb, "");
-        setMessage(sb, config, "gma_usage", "%prefix% §7Usage§8: §c/gma [Player]");
-        setMessage(sb, config, "gmc_usage", "%prefix% §7Usage§8: §c/gmc [Player]");
-        setMessage(sb, config, "gms_usage", "%prefix% §7Usage§8: §c/gms [Player]");
-        setMessage(sb, config, "gmsp_usage", "%prefix% §7Usage§8: §c/gmsp [Player]");
+        setMessage(sb, config, "gma_usage", "%prefix% &7Usage&8: &c/gma [Player]");
+        setMessage(sb, config, "gmc_usage", "%prefix% &7Usage&8: &c/gmc [Player]");
+        setMessage(sb, config, "gms_usage", "%prefix% &7Usage&8: &c/gms [Player]");
+        setMessage(sb, config, "gmsp_usage", "%prefix% &7Usage&8: &c/gmsp [Player]");
         addLine(sb, "");
         addLine(sb, "# ---------");
         addLine(sb, "# GAMEMODES");
@@ -75,25 +72,25 @@ public class Messages {
         addLine(sb, "# ---------");
         addLine(sb, "# GUIs");
         addLine(sb, "# ---------");
-        setMessage(sb, config, "colour_guiName", "§8Choose a colour");
+        setMessage(sb, config, "colour_guiName", "&8Choose a colour");
         addLine(sb, "");
-        setMessage(sb, config, "colour_red", "§cRed");
-        setMessage(sb, config, "colour_orange", "§6Orange");
-        setMessage(sb, config, "colour_yellow", "§eYellow");
-        setMessage(sb, config, "colour_pink", "§dPink");
-        setMessage(sb, config, "colour_purple", "§5Purple");
-        setMessage(sb, config, "colour_lime", "§aLime");
-        setMessage(sb, config, "colour_green", "§2Green");
-        setMessage(sb, config, "colour_blue", "§9Blue");
-        setMessage(sb, config, "colour_cyan", "§3Cyan");
-        setMessage(sb, config, "colour_aqua", "§bAqua");
-        setMessage(sb, config, "colour_white", "§fWhite");
-        setMessage(sb, config, "colour_lightGrey", "§7Light Grey");
-        setMessage(sb, config, "colour_grey", "§8Grey");
-        setMessage(sb, config, "colour_black", "§0Black");
+        setMessage(sb, config, "colour_red", "&cRed");
+        setMessage(sb, config, "colour_orange", "&6Orange");
+        setMessage(sb, config, "colour_yellow", "&eYellow");
+        setMessage(sb, config, "colour_pink", "&dPink");
+        setMessage(sb, config, "colour_purple", "&5Purple");
+        setMessage(sb, config, "colour_lime", "&aLime");
+        setMessage(sb, config, "colour_green", "&2Green");
+        setMessage(sb, config, "colour_blue", "&9Blue");
+        setMessage(sb, config, "colour_cyan", "&3Cyan");
+        setMessage(sb, config, "colour_aqua", "&bAqua");
+        setMessage(sb, config, "colour_white", "&fWhite");
+        setMessage(sb, config, "colour_lightGrey", "&7Light Grey");
+        setMessage(sb, config, "colour_grey", "&8Grey");
+        setMessage(sb, config, "colour_black", "&0Black");
         addLine(sb, "");
-        setMessage(sb, config, "gamemode_guiName", "§8Choose a gamemode");
-        setMessage(sb, config, "gamemode_lore", "§7§oChanges your gamemode to %gamemode%.");
+        setMessage(sb, config, "gamemode_guiName", "&8Choose a gamemode");
+        setMessage(sb, config, "gamemode_lore", "&7&oChanges your gamemode to %gamemode%.");
 
         try {
             FileWriter fw = new FileWriter(file, false);

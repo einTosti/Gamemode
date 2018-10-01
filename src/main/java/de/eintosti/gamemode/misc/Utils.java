@@ -1,6 +1,5 @@
 package de.eintosti.gamemode.misc;
 
-import de.eintosti.gamemode.Gamemode;
 import de.eintosti.gamemode.inventories.ColourInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -28,15 +27,13 @@ public class Utils {
     private static Utils instance;
 
     public static synchronized Utils getInstance() {
-        if (instance == null) {
-            instance = new Utils();
-        }
+        if (instance == null) instance = new Utils();
         return instance;
     }
 
     public String getString(String string) {
         try {
-            return Messages.getInstance().mMessageData.get(string).replace("%prefix%", Messages.getInstance().mMessageData.get("prefix").replace("%colour%", mColour.toString()).replace("&", "§"));
+            return Messages.getInstance().mMessageData.get(string).replace("%prefix%", Messages.getInstance().mMessageData.get("prefix").replace("%colour%", mColour.toString())).replace("&", "§");
         } catch (NullPointerException e) {
             Messages.getInstance().createMessageFile();
             return getString(string);
@@ -70,48 +67,39 @@ public class Utils {
     }
 
     public void saveColour() {
-        BufferedReader br = null;
-        BufferedWriter bw = null;
-
+        BufferedReader bufferedReader = null;
+        BufferedWriter bufferedWriter = null;
         try {
             ArrayList<String> lines = new ArrayList<>();
-
             if (mColourFile.exists()) {
                 InputStream fis = new FileInputStream(mColourFile);
                 InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
-                br = new BufferedReader(isr);
+                bufferedReader = new BufferedReader(isr);
 
                 while (true) {
-                    String line = br.readLine();
-                    if (line == null || line.startsWith(COLOUR_KEY)) {
-                        break;
-                    }
+                    String line = bufferedReader.readLine();
+                    if (line == null || line.startsWith(COLOUR_KEY)) break;
                     lines.add(line);
                 }
             }
-            OutputStream fos = new FileOutputStream(mColourFile);
-            OutputStreamWriter osw = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+            OutputStream outputStream = new FileOutputStream(mColourFile);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
 
-            bw = new BufferedWriter(osw);
+            bufferedWriter = new BufferedWriter(outputStreamWriter);
             for (String line : lines) {
-                bw.write(line);
-                bw.newLine();
+                bufferedWriter.write(line);
+                bufferedWriter.newLine();
             }
-
-            bw.write(COLOUR_KEY);
-            bw.write(KEY_VALUE_SEP);
-            bw.write(mColour.getChar());
-            bw.newLine();
+            bufferedWriter.write(COLOUR_KEY);
+            bufferedWriter.write(KEY_VALUE_SEP);
+            bufferedWriter.write(mColour.getChar());
+            bufferedWriter.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (br != null) {
-                    br.close();
-                }
-                if (bw != null) {
-                    bw.close();
-                }
+                if (bufferedReader != null) bufferedReader.close();
+                if (bufferedWriter != null) bufferedWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -119,24 +107,17 @@ public class Utils {
     }
 
     public void readColour() {
-        BufferedReader br = null;
+        BufferedReader bufferedReader = null;
         try {
             if (mColourFile.exists()) {
-                InputStream fis = new FileInputStream(mColourFile);
-                InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
-                br = new BufferedReader(isr);
-
+                InputStream inputStream = new FileInputStream(mColourFile);
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+                bufferedReader = new BufferedReader(inputStreamReader);
                 while (true) {
-                    String line = br.readLine();
-                    if (line == null) {
-                        break;
-                    }
-
-                    if (line.isEmpty() || line.startsWith("#")) {
-                        continue;
-                    }
+                    String line = bufferedReader.readLine();
+                    if (line == null) break;
+                    if (line.isEmpty() || line.startsWith("#")) continue;
                     String[] keyValues = line.split(":");
-
                     if (keyValues[0].equals(COLOUR_KEY)) {
                         mColour = ChatColor.getByChar(keyValues[1].charAt(0));
                         break;
@@ -147,34 +128,24 @@ public class Utils {
             e.printStackTrace();
         } finally {
             try {
-                if (br != null) {
-                    br.close();
-                }
+                if (bufferedReader != null) bufferedReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-        RandomAccessFile raf = null;
+        RandomAccessFile randomAccessFile = null;
         try {
-            raf = new RandomAccessFile(mColourFile, "r");
+            randomAccessFile = new RandomAccessFile(mColourFile, "r");
             while (true) {
-                String line = raf.readLine();
-                if (line == null) {
-                    break;
-                }
-                if (line.isEmpty() || line.startsWith("#")) {
-                    continue;
-                }
-
+                String line = randomAccessFile.readLine();
+                if (line == null) break;
+                if (line.isEmpty() || line.startsWith("#")) continue;
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (raf != null) {
-                    raf.close();
-                }
+                if (randomAccessFile != null) randomAccessFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
