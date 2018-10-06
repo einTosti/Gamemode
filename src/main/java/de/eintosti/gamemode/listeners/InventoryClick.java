@@ -53,6 +53,9 @@ public class InventoryClick implements Listener {
 
         if (event.getInventory().getName().equals(Utils.getInstance().getString("colour_guiName"))) {
             event.setCancelled(true);
+            if(event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR){
+             return;   
+            }
 
             ItemStack itemStack = event.getCurrentItem();
             Material itemType = itemStack.getType();
