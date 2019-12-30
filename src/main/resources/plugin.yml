@@ -1,8 +1,8 @@
 name: Gamemode
-version: 2.0.4
+version: "3.0"
 main: de.eintosti.gamemode.Gamemode
 author: einTosti
-website: www.twitter.com/einTosti
+api-version: "1.13"
 
 commands:
     gm:
@@ -25,25 +25,25 @@ commands:
 permissions:
     gm.colour:
         description: Allows you to change the colour of the messages
-        default: OP
+        default: true
     gm.creative:
         description: Allows you to change your gamemode to creative
-        default: OP
+        default: op
     gm.survival:
         description: Allows you to change your gamemode to survival
-        default: OP
+        default: op
     gm.adventure:
         description: Allows you to change your gamemode to adventure
-        default: OP
+        default: op
     gm.spectator:
         description: Allows you to change your gamemode to spectator
-        default: OP
+        default: op
     gm.setothers:
         description: Allows you to change the gammeode of other players
-        default: OP
+        default: op
     gm.info:
         description: Tells you information about the plugin
         default: true
     gm.notify:
         description: Get notified if there is a new version available
-        default: OP
+        default: op

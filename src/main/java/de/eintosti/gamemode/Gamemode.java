@@ -1,11 +1,12 @@
 package de.eintosti.gamemode;
 
 import de.eintosti.gamemode.commands.*;
-import de.eintosti.gamemode.listeners.InventoryClick;
-import de.eintosti.gamemode.listeners.PlayerJoin;
+import de.eintosti.gamemode.listeners.InventoryClickListener;
+import de.eintosti.gamemode.listeners.PlayerJoinListener;
 import de.eintosti.gamemode.misc.Messages;
 import de.eintosti.gamemode.misc.Utils;
-import de.eintosti.gamemode.tabcomplete.GamemodeTC;
+import de.eintosti.gamemode.tabcomplete.GamemodeTabCompleter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -27,19 +28,20 @@ public class Gamemode extends JavaPlugin {
         registerListeners();
         registerTabCompleters();
 
-        manageFiles();
+        Utils.getInstance().thaw();
         getConfig().options().copyDefaults(true);
         saveConfig();
         Messages.getInstance().createMessageFile();
 
-        getLogger().info("Plugin activated");
+        Bukkit.getConsoleSender().sendMessage("Gamemode » Plugin §aenabled§r!");
     }
 
     @Override
     public void onDisable() {
-        plugin = null;
+        Utils.getInstance().freeze();
         saveConfig();
-        getLogger().info("Plugin deactivated");
+        plugin = null;
+        Bukkit.getConsoleSender().sendMessage("Gamemode » Plugin §cdisabled§r!");
     }
 
     private void setInstance() {
@@ -51,12 +53,12 @@ public class Gamemode extends JavaPlugin {
     }
 
     private void registerListeners() {
-        getPluginManager().registerEvents(new InventoryClick(), this);
-        getPluginManager().registerEvents(new PlayerJoin(), this);
+        getPluginManager().registerEvents(new InventoryClickListener(), this);
+        getPluginManager().registerEvents(new PlayerJoinListener(), this);
     }
 
     private void registerTabCompleters() {
-        this.getCommand("gm").setTabCompleter(new GamemodeTC());
+        this.getCommand("gm").setTabCompleter(new GamemodeTabCompleter());
     }
 
     private void registerExecutors() {
@@ -68,16 +70,9 @@ public class Gamemode extends JavaPlugin {
     }
 
     private void manageFiles() {
-        Utils.getInstance().mGameMode = new File(getDataFolder() + File.separator);
-        if (!Utils.getInstance().mGameMode.exists()) {
-            Utils.getInstance().mGameMode.mkdirs();
-        }
-
-        Utils.getInstance().mColourFile = new File(Utils.getInstance().mGameMode, Utils.getInstance().FILENAME);
-        if (!Utils.getInstance().mColourFile.exists()) {
-            Utils.getInstance().saveColour();
-        } else {
-            Utils.getInstance().readColour();
+        Utils.getInstance().gameMode = new File(getDataFolder() + File.separator);
+        if (!Utils.getInstance().gameMode.exists()) {
+            Utils.getInstance().gameMode.mkdirs();
         }
     }
 }

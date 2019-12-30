@@ -1,11 +1,11 @@
-package de.eintosti.gamemode.misc.fancymessage.mkremins.fanciful;
+package de.eintosti.gamemode.misc.external.fancymessage.mkremins.fanciful;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
-import de.eintosti.gamemode.misc.fancymessage.net.amoebaman.util.ArrayWrapper;
+import de.eintosti.gamemode.misc.external.fancymessage.net.amoebaman.util.ArrayWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -15,15 +15,10 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
-import static de.eintosti.gamemode.misc.fancymessage.mkremins.fanciful.TextualComponent.rawText;
+import static de.eintosti.gamemode.misc.external.fancymessage.mkremins.fanciful.TextualComponent.rawText;
 
 /**
  * Represents a formattable message. Such messages can use elements such as colors, formatting codes, hover and click data, and other features provided by the vanilla Minecraft <a href="http://minecraft.gamepedia.com/Tellraw#Raw_JSON_Text">JSON message formatter</a>.

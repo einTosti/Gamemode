@@ -12,12 +12,12 @@ import java.util.List;
 /**
  * @author einTosti
  */
-public class GamemodeTC implements TabCompleter {
+public class GamemodeTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command label, String alias, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Utils.getInstance().getString("not_a_player"));
+            sender.sendMessage(Utils.getInstance().getString("not_a_player", null));
             return null;
         }
 
@@ -32,5 +32,15 @@ public class GamemodeTC implements TabCompleter {
             return argumentsList;
         }
         return null;
+    }
+
+    private enum Arguments {
+        creative,
+        survival,
+        adventure,
+        spectator,
+        colour,
+        info,
+        reload
     }
 }

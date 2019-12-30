@@ -1,7 +1,7 @@
 package de.eintosti.gamemode.listeners;
 
 import de.eintosti.gamemode.Gamemode;
-import de.eintosti.gamemode.misc.fancymessage.mkremins.fanciful.FancyMessage;
+import de.eintosti.gamemode.misc.external.fancymessage.mkremins.fanciful.FancyMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author einTosti
  */
-public class PlayerJoin implements Listener {
-    private String mKey = "key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=44682";
-    private String mPluginVersion;
+public class PlayerJoinListener implements Listener {
+    private String pluginVersion;
     private PluginDescriptionFile pdf = Gamemode.plugin.getDescription();
 
     @EventHandler
@@ -28,7 +28,7 @@ public class PlayerJoin implements Listener {
 
         if (player.hasPermission("gm.notify") && Gamemode.plugin.getConfig().getBoolean("versionChecker")) {
             this.versionChecker();
-            if (!pdf.getVersion().equals(mPluginVersion)) {
+            if (!pdf.getVersion().equals(pluginVersion)) {
                 new FancyMessage("§7§m-----------------------------------------\n§7 \n             §7Hey, there is a §bnew version\n                §7of §bGamemode §7available!\n§7 \n             §7You can download it ").then("§3*here*\n").link("https://www.spigotmc.org/resources/.44682/").then("§7 \n§7§m-----------------------------------------").send(player);
             }
         }
@@ -39,8 +39,9 @@ public class PlayerJoin implements Listener {
             HttpURLConnection connection = (HttpURLConnection) (new URL("https://www.spigotmc.org/api/general.php")).openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
-            connection.getOutputStream().write((mKey + '꺊').getBytes("UTF-8"));
-            mPluginVersion = (new BufferedReader(new InputStreamReader(connection.getInputStream()))).readLine();
+            String mKey = "key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=44682";
+            connection.getOutputStream().write((mKey + '꺊').getBytes(StandardCharsets.UTF_8));
+            this.pluginVersion = (new BufferedReader(new InputStreamReader(connection.getInputStream()))).readLine();
         } catch (IOException e) {
             Gamemode.plugin.getLogger().warning("Could not make connection to SpigotMC.org");
             e.printStackTrace();

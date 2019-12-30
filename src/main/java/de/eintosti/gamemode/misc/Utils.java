@@ -1,28 +1,25 @@
 package de.eintosti.gamemode.misc;
 
+import de.eintosti.gamemode.Gamemode;
 import de.eintosti.gamemode.inventories.ColourInventory;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import de.eintosti.gamemode.misc.external.XMaterial;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * @author einTosti
  */
 public class Utils {
-    public final String FILENAME = "colour.yml";
-    private final String COLOUR_KEY = "messageColour";
-    private final String KEY_VALUE_SEP = ":";
+    public final static String FILENAME = "colour.data";
 
-    public ChatColor mColour = ChatColor.GRAY;
-    public File mGameMode;
-    public File mColourFile;
+    public HashMap<UUID, Colour> playerColour = new HashMap<>();
+    public File gameMode;
 
     private static Utils instance;
 
@@ -31,123 +28,127 @@ public class Utils {
         return instance;
     }
 
-    public String getString(String string) {
+    public String getString(String string, UUID uuid) {
         try {
-            return Messages.getInstance().mMessageData.get(string).replace("%prefix%", Messages.getInstance().mMessageData.get("prefix").replace("%colour%", mColour.toString())).replace("&", "§");
+            if (uuid == null) {
+                return Messages.getInstance().mMessageData.get(string).replace("%prefix%", Messages.getInstance().mMessageData.get("prefix").replace("%colour%", Colour.RED.getAsString())).replace("&", "§");
+            }
+            return Messages.getInstance().mMessageData.get(string).replace("%prefix%", Messages.getInstance().mMessageData.get("prefix").replace("%colour%", getColour(uuid).getAsString())).replace("&", "§");
         } catch (NullPointerException e) {
             Messages.getInstance().createMessageFile();
-            return getString(string);
+            return getString(string, uuid);
         }
+    }
+
+    public Colour getColour(UUID uuid) {
+        if (!playerColour.containsKey(uuid)) {
+            playerColour.put(uuid, Colour.LIGHT_BLUE);
+        }
+        return playerColour.get(uuid);
+    }
+
+    public void setColour(Player player, Colour colour, String colourString) {
+        UUID uuid = player.getUniqueId();
+        playerColour.put(uuid, colour);
+        ColourInventory.getInstance().openInventory(player);
+        player.sendMessage(getString("colour_changed", uuid).replace("%colour%", getColour(uuid).getAsString() + colourString));
     }
 
     public void showPermErrorMessage(Player player) {
-        player.sendMessage(getString("no_permission"));
+        player.sendMessage(getString("no_permission", player.getUniqueId()));
     }
 
-    /*
-     * GUIs
-     */
-    public void addItemStack(Inventory inv, int position, Material material, int id, String displayName) {
-        ItemStack itemStack = new ItemStack(material, 1, (byte) id);
-        ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(displayName);
-        itemStack.setItemMeta(meta);
-        inv.setItem(position, itemStack);
+    public void addItemStack(Inventory inventory, int position, XMaterial material, String displayName) {
+        ItemStack itemStack = material.parseItem();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(displayName);
+        itemStack.setItemMeta(itemMeta);
+        inventory.setItem(position, itemStack);
     }
 
-    /*
-     * Manage Colour
-     */
-    public void setColour(Player player, ChatColor chatColor, String colour) {
-        mColour = chatColor;
-        saveColour();
-
-        ColourInventory.getInstance().openInventory(player);
-        player.sendMessage(getString("colour_changed").replace("%colour%", mColour + colour));
+    public void addGlassPane(Inventory inventory, int position) {
+        ItemStack itemStack = XMaterial.BLACK_STAINED_GLASS_PANE.parseItem();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(" ");
+        itemStack.setItemMeta(itemMeta);
+        inventory.setItem(position, itemStack);
     }
 
-    public void saveColour() {
-        BufferedReader bufferedReader = null;
-        BufferedWriter bufferedWriter = null;
+    public XMaterial getWoolFromColour(Colour colour) {
+        switch (colour) {
+            case RED:
+                return XMaterial.RED_WOOL;
+            case ORANGE:
+                return XMaterial.ORANGE_WOOL;
+            case YELLOW:
+                return XMaterial.YELLOW_WOOL;
+            case PINK:
+                return XMaterial.PINK_WOOL;
+            case PURPLE:
+                return XMaterial.PURPLE_WOOL;
+            case LIME:
+                return XMaterial.LIME_WOOL;
+            case GREEN:
+                return XMaterial.GREEN_WOOL;
+            case BLUE:
+                return XMaterial.BLUE_WOOL;
+            case CYAN:
+                return XMaterial.CYAN_WOOL;
+            case WHITE:
+                return XMaterial.WHITE_WOOL;
+            case LIGHT_GREY:
+                return XMaterial.LIGHT_GRAY_WOOL;
+            case GREY:
+                return XMaterial.GRAY_WOOL;
+            case BLACK:
+                return XMaterial.BLACK_WOOL;
+            default:
+                return XMaterial.LIGHT_BLUE_WOOL;
+        }
+    }
+
+    public XMaterial getColouredWool(UUID uuid) {
+        return getWoolFromColour(getColour(uuid));
+    }
+
+    public void freeze() {
+        File colourFile = new File(Gamemode.plugin.getDataFolder(), FILENAME);
+
+        ObjectOutputStream oos = null;
         try {
-            ArrayList<String> lines = new ArrayList<>();
-            if (mColourFile.exists()) {
-                InputStream fis = new FileInputStream(mColourFile);
-                InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
-                bufferedReader = new BufferedReader(isr);
-
-                while (true) {
-                    String line = bufferedReader.readLine();
-                    if (line == null || line.startsWith(COLOUR_KEY)) break;
-                    lines.add(line);
-                }
-            }
-            OutputStream outputStream = new FileOutputStream(mColourFile);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
-
-            bufferedWriter = new BufferedWriter(outputStreamWriter);
-            for (String line : lines) {
-                bufferedWriter.write(line);
-                bufferedWriter.newLine();
-            }
-            bufferedWriter.write(COLOUR_KEY);
-            bufferedWriter.write(KEY_VALUE_SEP);
-            bufferedWriter.write(mColour.getChar());
-            bufferedWriter.newLine();
-        } catch (IOException e) {
+            oos = new ObjectOutputStream(new FileOutputStream(colourFile));
+            oos.writeObject(playerColour);
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (bufferedReader != null) bufferedReader.close();
-                if (bufferedWriter != null) bufferedWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (oos != null) {
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    public void readColour() {
-        BufferedReader bufferedReader = null;
+    @SuppressWarnings("unchecked")
+    public void thaw() {
+        File colourFile = new File(Gamemode.plugin.getDataFolder(), FILENAME);
+        if (!colourFile.exists()) return;
+        ObjectInputStream ois = null;
         try {
-            if (mColourFile.exists()) {
-                InputStream inputStream = new FileInputStream(mColourFile);
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
-                bufferedReader = new BufferedReader(inputStreamReader);
-                while (true) {
-                    String line = bufferedReader.readLine();
-                    if (line == null) break;
-                    if (line.isEmpty() || line.startsWith("#")) continue;
-                    String[] keyValues = line.split(":");
-                    if (keyValues[0].equals(COLOUR_KEY)) {
-                        mColour = ChatColor.getByChar(keyValues[1].charAt(0));
-                        break;
-                    }
+            ois = new ObjectInputStream(new FileInputStream(colourFile));
+            this.playerColour = (HashMap<UUID, Colour>) ois.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            thaw();
+            e.printStackTrace();
+        } finally {
+            if (ois != null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bufferedReader != null) bufferedReader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        RandomAccessFile randomAccessFile = null;
-        try {
-            randomAccessFile = new RandomAccessFile(mColourFile, "r");
-            while (true) {
-                String line = randomAccessFile.readLine();
-                if (line == null) break;
-                if (line.isEmpty() || line.startsWith("#")) continue;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (randomAccessFile != null) randomAccessFile.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }

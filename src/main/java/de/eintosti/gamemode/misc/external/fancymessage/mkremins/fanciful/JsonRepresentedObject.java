@@ -1,4 +1,4 @@
-package de.eintosti.gamemode.misc.fancymessage.mkremins.fanciful;
+package de.eintosti.gamemode.misc.external.fancymessage.mkremins.fanciful;
 
 import com.google.gson.stream.JsonWriter;
 

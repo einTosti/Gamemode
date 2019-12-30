@@ -2,8 +2,8 @@ package de.eintosti.gamemode.inventories;
 
 import de.eintosti.gamemode.Gamemode;
 import de.eintosti.gamemode.misc.Utils;
+import de.eintosti.gamemode.misc.external.XMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -26,46 +26,47 @@ public class InfoInventory {
         return instance;
     }
 
-    private Inventory getInfoInventory() {
-        Inventory inv = Bukkit.createInventory(null, 27, "§8Plugin Information");
+    private Inventory getInfoInventory(Player player) {
+        Inventory inventory = Bukkit.createInventory(null, 27, "§8Plugin Information");
 
-        this.addSkullItemStack(inv);
-        this.addVersionItemStack(inv);
+        addSkullItemStack(inventory, player);
+        addVersionItemStack(inventory, player);
 
-        for (int i = 0; i <= 9; ++i) {
-            Utils.getInstance().addItemStack(inv, i, Material.STAINED_GLASS_PANE, 15, " ");
+        for (int i = 0; i <= 11; ++i) {
+            Utils.getInstance().addGlassPane(inventory, i);
         }
-        for (int i = 17; i <= 26; ++i) {
-            Utils.getInstance().addItemStack(inv, i, Material.STAINED_GLASS_PANE, 15, " ");
+        for (int i = 15; i <= 26; ++i) {
+            Utils.getInstance().addGlassPane(inventory, i);
         }
-        return inv;
+        return inventory;
     }
 
     public void openInventory(Player player) {
-        player.openInventory(getInfoInventory());
+        player.openInventory(getInfoInventory(player));
     }
 
-    private void addVersionItemStack(Inventory inv) {
+    private void addVersionItemStack(Inventory inventory, Player player) {
         PluginDescriptionFile pdf = Gamemode.plugin.getDescription();
-        ItemStack itemStack = new ItemStack(Material.DIODE, 1, (short) 0);
+        ItemStack itemStack = XMaterial.ANVIL.parseItem();
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName("§7Current Version");
-        itemMeta.setLore(Arrays.asList("§8» " + Utils.getInstance().mColour + pdf.getVersion()));
+        itemMeta.setLore(Arrays.asList("§8» " + Utils.getInstance().getColour(player.getUniqueId()).getAsString() + pdf.getVersion()));
         itemStack.setItemMeta(itemMeta);
 
-        inv.setItem(14, itemStack);
+        inventory.setItem(14, itemStack);
     }
 
-    private void addSkullItemStack(Inventory inv) {
-        ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+    @SuppressWarnings("deprecation")
+    private void addSkullItemStack(Inventory inventory, Player player) {
+        ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 
         skullMeta.setOwner("einTosti");
         skullMeta.setDisplayName("§7Plugin Author");
-        skullMeta.setLore(Arrays.asList(("§8» " + Utils.getInstance().mColour + "einTosti")));
+        skullMeta.setLore(Arrays.asList(("§8» " + Utils.getInstance().getColour(player.getUniqueId()).getAsString() + "einTosti")));
         skull.setItemMeta(skullMeta);
 
-        inv.setItem(12, skull);
+        inventory.setItem(12, skull);
     }
 }
